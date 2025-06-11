@@ -45,7 +45,7 @@ export default function ProductCard({
 
         {isBestSeller && (
           <div className="absolute left-2 top-2 rounded-md bg-yellow-500 px-2 py-1 text-xs font-medium text-white">
-            BEST SELLER
+            MÁS VENDIDA
           </div>
         )}
       </div>
