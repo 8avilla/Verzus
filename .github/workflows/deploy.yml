@@ -23,21 +23,21 @@ jobs:
       - name: Ensure project directory exists on VPS
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }} # Se cambia 'key' por 'password'
+          host: 51.83.73.189
+          username: ubuntu
+          password: Amaranto1. # Se cambia 'key' por 'password'
           script: |
             # Crea el directorio si no existe.
             sudo mkdir -p /var/www/storeverzusfront
             # Asigna la propiedad del directorio al usuario de despliegue.
-            sudo chown -R ${{ secrets.VPS_USER }}:${{ secrets.VPS_USER }} /var/www/storeverzusfront
+            sudo chown -R ubuntu:ubuntu /var/www/storeverzusfront
 
       # 3. Copia los archivos del proyecto a la VPS usando SCP
       - name: Copy files to VPS
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }} # Se cambia 'key' por 'password'
+          host: 51.83.73.189
+          username: ubuntu
+          password: Amaranto1. # Se cambia 'key' por 'password'
           source: "."
           target: "/var/www/storeverzusfront"
