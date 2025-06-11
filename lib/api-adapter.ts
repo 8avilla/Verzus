@@ -1,7 +1,25 @@
-import type { Product } from "./products-data"
 import type { ProductDto } from "./api-types"
 
-// Función para convertir ProductDto de la API a nuestro modelo Product
+// Tipo simplificado para compatibilidad con el carrito
+export interface Product {
+  id: string
+  name: string
+  price: number
+  discountPercentage?: number | null
+  freeShipping?: boolean | null
+  image: string
+  images?: string[]
+  category: string
+  description: string
+  features?: string[]
+  sizes?: string[]
+  colors?: string[]
+  isNew?: boolean | null
+  isBestSeller?: boolean | null
+  stock?: number | null
+}
+
+// Función para convertir ProductDto de la API a nuestro modelo Product simplificado
 export function adaptProductDtoToProduct(productDto: ProductDto): Product {
   return {
     id: productDto.id,
@@ -11,7 +29,7 @@ export function adaptProductDtoToProduct(productDto: ProductDto): Product {
     freeShipping: productDto.freeShipping,
     image: productDto.mainImage,
     images: productDto.imageGallery || [productDto.mainImage],
-    category: productDto.category.name,
+    category: productDto.category?.name || "",
     description: productDto.description,
     features: productDto.features?.map((f) => f.name) || [],
     sizes: productDto.sizes?.map((s) => s.name) || [],

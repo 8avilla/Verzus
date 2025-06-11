@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { getProductsByCategory, getCategories } from "@/lib/products-data"
 import MobileFilterDrawer from "@/components/mobile-filter-drawer"
+import type { ProductDto } from "@/lib/api-types"
 
 export default function ProductsPage() {
   const searchParams = useSearchParams()
@@ -22,7 +23,7 @@ export default function ProductsPage() {
   const [showDiscount, setShowDiscount] = useState(false)
   const [showFreeShipping, setShowFreeShipping] = useState(false)
   const [priceRange, setPriceRange] = useState([0, 300000])
-  const [filteredProducts, setFilteredProducts] = useState(getProductsByCategory("Todos"))
+  const [filteredProducts, setFilteredProducts] = useState<ProductDto[]>(getProductsByCategory("Todos"))
 
   // Función para aplicar filtros
   const applyFilters = useCallback(() => {
@@ -170,20 +171,7 @@ export default function ProductsPage() {
                       {filteredProducts.length > 0 ? (
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                           {filteredProducts.map((product) => (
-                            <ProductCard
-                              key={product.id}
-                              id={product.id}
-                              name={product.name}
-                              price={product.price}
-                              discountPercentage={product.discountPercentage}
-                              freeShipping={product.freeShipping}
-                              image={product.image}
-                              category={product.category}
-                              description={product.description}
-                              sizes={product.sizes}
-                              isNew={product.isNew}
-                              isBestSeller={product.isBestSeller}
-                            />
+                            <ProductCard key={product.id} {...product} />
                           ))}
                         </div>
                       ) : (

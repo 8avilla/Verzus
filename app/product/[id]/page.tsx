@@ -84,7 +84,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         price: product.price,
         discountPercentage: product.discountPercentage,
         freeShipping: product.freeShipping,
-        image: product.image,
+        image: product.mainImage,
         quantity,
         size: selectedSize,
       })
@@ -111,7 +111,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
       price: product.price,
       discountPercentage: product.discountPercentage,
       freeShipping: product.freeShipping,
-      image: product.image,
+      image: product.mainImage,
       quantity,
       size: selectedSize,
     })
@@ -140,12 +140,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
             {/* Galería de imágenes */}
-            <ImageGallery images={product.images || [product.image]} alt={product.name} />
+            <ImageGallery images={product.imageGallery || [product.mainImage]} alt={product.name} />
 
             {/* Información del producto */}
             <div className="space-y-6">
               <div>
-                <p className="text-sm text-gray-500">{product.category}</p>
+                <p className="text-sm text-gray-500">{product.category?.name || ""}</p>
                 <h1 className="mt-1 text-3xl font-bold">{product.name}</h1>
                 <div className="mt-2 flex flex-col">
                   {product.discountPercentage ? (
@@ -192,13 +192,13 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                       className="flex space-x-2"
                     >
                       {product.sizes.map((size) => (
-                        <div key={size}>
-                          <RadioGroupItem value={size} id={`size-${size}`} className="peer sr-only" />
+                        <div key={size.id}>
+                          <RadioGroupItem value={size.name} id={`size-${size.name}`} className="peer sr-only" />
                           <Label
-                            htmlFor={`size-${size}`}
+                            htmlFor={`size-${size.name}`}
                             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-gray-200 peer-data-[state=checked]:border-black peer-data-[state=checked]:bg-black peer-data-[state=checked]:text-white"
                           >
-                            {size}
+                            {size.name}
                           </Label>
                         </div>
                       ))}
@@ -283,7 +283,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                           <path
                             className="opacity-75"
                             fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
                         </svg>
                       </span>
@@ -303,8 +303,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 <div className="space-y-3 border-t pt-6">
                   <h2 className="font-medium">Características</h2>
                   <ul className="list-inside list-disc space-y-1 text-gray-600">
-                    {product.features.map((feature, index) => (
-                      <li key={index}>{feature}</li>
+                    {product.features.map((feature) => (
+                      <li key={feature.id}>{feature.name}</li>
                     ))}
                   </ul>
                 </div>
@@ -330,7 +330,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
       {product && (
         <ProductRecommendations
           currentProductId={product.id}
-          category={product.category}
+          category={product.category.name}
           title="PRODUCTOS QUE TE PODRÍAN INTERESAR"
         />
       )}

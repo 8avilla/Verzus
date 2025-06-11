@@ -2,40 +2,24 @@
 
 import Link from "next/link"
 import { formatCurrency } from "@/lib/utils"
-import ImageWithLoading from "@/components/image-with-loading"
+import Image from "next/image"
+import type { ProductDto } from "@/lib/api-types"
 
-interface ProductCardProps {
+interface ProductCardProps extends Partial<ProductDto> {
   id?: string
-  name: string
-  price: number
-  discountPercentage?: number
-  freeShipping?: boolean
-  image: string
-  category: string
-  description?: string
-  sizes?: string[]
-  isNew?: boolean
-  isBestSeller?: boolean
-  stock?: number
-  images?: string[]
-  features?: string[]
 }
 
 export default function ProductCard({
   id = "example",
-  name,
-  price,
+  name = "",
+  price = 0,
   discountPercentage,
   freeShipping,
-  image,
+  mainImage = "",
   category,
   isNew,
   isBestSeller,
-  description = "",
-  sizes = [],
   stock = 0,
-  images = [],
-  features = [],
 }: ProductCardProps) {
   // Calcular el precio con descuento si existe
   const discountedPrice = discountPercentage ? price - price * (discountPercentage / 100) : null
@@ -43,7 +27,14 @@ export default function ProductCard({
   return (
     <Link href={`/product/${id}`} className="group block">
       <div className="relative aspect-square overflow-hidden bg-gray-100">
-        <ImageWithLoading src={image || "/placeholder.svg"} alt={name} className="h-full w-full object-cover" />
+        <Image
+          src={mainImage || "/placeholder.svg"}
+          alt={name}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={false} // O true si es una imagen crítica en la página de listado
+        />
 
         {/* Badges para New y Best Seller */}
         {isNew && (
@@ -59,7 +50,7 @@ export default function ProductCard({
         )}
       </div>
       <div className="mt-3">
-        <p className="text-xs text-gray-500">{category}</p>
+        <p className="text-xs text-gray-500">{category?.name || ""}</p>
         <h3 className="mt-1 text-sm font-medium">{name}</h3>
         <div className="mt-1 flex flex-col">
           {discountPercentage ? (
